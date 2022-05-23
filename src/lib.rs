@@ -22,12 +22,13 @@ impl Config {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    println!("{}", contents);
-
+    for line in search(&config.query, &contents) {
+      println!("{}", line);
+    }
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a &str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
   let mut results = Vec::new();
 
   for line in contents.lines() {
