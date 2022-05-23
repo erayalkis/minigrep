@@ -20,6 +20,12 @@ impl Config {
     }
 }
 
+fn run(config: Config) {
+    let contents = fs::read_to_string(config.filename).expect("Could not read file.");
+
+    println!("{}", contents);
+}
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -28,6 +34,8 @@ fn main() {
         process::exit(1);
     });
 
-    let content = fs::read_to_string(config.filename).expect("Could not read file.");
-    println!("{}", content);
+    println!("Searching for {}", config.query);
+    println!("Inside file {}", config.filename);
+    
+    run(config);
 }
