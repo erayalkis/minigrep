@@ -1,6 +1,7 @@
 use std::env; // Import std::env to read Environment variables
 use std::fs; // Import std::fs to read and write files
 use std::process; // Import process to exit with code
+use std::error::Error;
 
 struct Config {
     query: String,
@@ -20,10 +21,12 @@ impl Config {
     }
 }
 
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename).expect("Could not read file.");
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.filename)?;
 
     println!("{}", contents);
+
+    Ok(())
 }
 
 
@@ -36,6 +39,9 @@ fn main() {
 
     println!("Searching for {}", config.query);
     println!("Inside file {}", config.filename);
-    
-    run(config);
+
+    if let Err(e) = run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    }
 }
